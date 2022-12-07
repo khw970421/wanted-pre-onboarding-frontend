@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { getItem } from "../utils/localStorage";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import request, { getRequest, putRequest } from "./../api/axios";
+import request, { deleteRequest, getRequest, putRequest } from "./../api/axios";
 
 const Todos = () => {
   const navigate = useNavigate();
@@ -23,14 +23,14 @@ const Todos = () => {
   };
 
   const addTodo = async () => {
-    const p = await request(
+    const addTodo = await request(
       "/todos",
       {
         todo: inputRef.current.value,
       },
       getItem("loginToken")
     );
-    const newTodos = [p, ...todos];
+    const newTodos = [...todos, addTodo];
     setTodos(newTodos);
   };
 
@@ -46,6 +46,13 @@ const Todos = () => {
     const newTodos = [...todos];
     newTodos[target.dataset["arridx"]].isCompleted =
       !newTodos[target.dataset["arridx"]].isCompleted;
+    setTodos(newTodos);
+  };
+
+  const deleteTodo = ({ target }) => {
+    deleteRequest(`/todos/${target.dataset["id"]}`, getItem("loginToken"));
+    const newTodos = [...todos];
+    newTodos.splice(target.dataset["arridx"], 1);
     setTodos(newTodos);
   };
 
@@ -68,7 +75,9 @@ const Todos = () => {
             <span>{todo}</span>
             <BtnContainer>
               <Btn>수정</Btn>
-              <Btn>삭제</Btn>
+              <Btn onClick={deleteTodo} data-id={id} data-arridx={idx}>
+                삭제
+              </Btn>
             </BtnContainer>
           </Li>
         ))}
