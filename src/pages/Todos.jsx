@@ -20,7 +20,6 @@ const Todos = () => {
   const getTodos = async () => {
     const todos = await getRequest("/todos", getItem("loginToken"));
     setTodos(todos);
-    console.log(todos);
   };
 
   const addTodo = async () => {
@@ -90,7 +89,7 @@ const Todos = () => {
               data-id={id}
               data-arridx={idx}
             ></input>
-            <span>{todo}</span>
+            <Span isCompleted={isCompleted}>{todo}</Span>
             <BtnContainer>
               <Modal
                 dataId={id}
@@ -117,6 +116,9 @@ const TodoList = styled.ul``;
 const BtnContainer = styled.div`
   display: flex;
   margin: 10px;
+`;
+const Span = styled.span`
+  text-decoration: ${({ isCompleted }) => (isCompleted ? "line-through" : "")};
 `;
 const Btn = styled.button`
   margin: 5px;
