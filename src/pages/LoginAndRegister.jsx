@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import request from "../api/axios";
+import { postRequest } from "../api/axios";
 import { getItem, setItem } from "../utils/localStorage";
 
 const LoginAndRegister = () => {
@@ -45,7 +45,7 @@ const LoginAndRegister = () => {
   const clickSubmit = async () => {
     // login시
     if (isLoginBtnClick) {
-      const { access_token } = await request(`/auth/signin`, {
+      const { access_token } = await postRequest(`/auth/signin`, {
         email: inputData.email,
         password: inputData.password,
       });
@@ -54,7 +54,7 @@ const LoginAndRegister = () => {
     }
     // 회원가입시
     else {
-      const { access_token } = await request(`/auth/signup`, {
+      const { access_token } = await postRequest(`/auth/signup`, {
         email: inputData.email,
         password: inputData.password,
       });
