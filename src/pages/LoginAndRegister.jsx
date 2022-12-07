@@ -1,11 +1,17 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import request from "../api/axios";
+import { setItem } from "../utils/localStorage";
 
 const LoginAndRegister = () => {
   const [isLoginBtnClick, setIsLoginBtnClick] = useState(true);
   const [isValidSubmit, setIsValidSubmit] = useState({
     email: false,
     password: false,
+  });
+  const [inputData, setInputData] = useState({
+    email: "",
+    password: "",
   });
 
   const clickBtn = () => setIsLoginBtnClick(!isLoginBtnClick);
@@ -15,16 +21,27 @@ const LoginAndRegister = () => {
         ...isValidSubmit,
         ...{ email: isEmailValid(target.value) },
       });
+      setInputData({ ...inputData, ...{ email: target.value } });
     } else if (target.type === "password") {
       setIsValidSubmit({
         ...isValidSubmit,
         ...{ password: isPasswordValid(target.value) },
       });
+      setInputData({ ...inputData, ...{ password: target.value } });
     }
   };
 
   const isEmailValid = (email) => email.includes("@");
   const isPasswordValid = (password) => password.length >= 8;
+
+  const clickSubmit = async () => {
+    const { access_token } = await request(
+      `/auth/signup`,
+      inputData.email,
+      inputData.password
+    );
+    access_token && setItem("loginToken", access_token);
+  };
 
   return (
     <div>
@@ -44,7 +61,10 @@ const LoginAndRegister = () => {
       </RegisterBtn>
       <input type="email" onChange={changeInputValue}></input>
       <input type="password" onChange={changeInputValue}></input>
-      <button disabled={!(isValidSubmit.email && isValidSubmit.password)}>
+      <button
+        onClick={clickSubmit}
+        disabled={!(isValidSubmit.email && isValidSubmit.password)}
+      >
         제출
       </button>
     </div>
