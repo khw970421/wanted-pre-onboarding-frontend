@@ -3,6 +3,7 @@ import { getItem } from "../utils/localStorage";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import request, { deleteRequest, getRequest, putRequest } from "./../api/axios";
+import Modal from "../components/Modal";
 
 const Todos = () => {
   const navigate = useNavigate();
@@ -34,8 +35,8 @@ const Todos = () => {
     setTodos(newTodos);
   };
 
-  const clickCheckbox = ({ target }) => {
-    const res = putRequest(
+  const clickCheckbox = async ({ target }) => {
+    const res = await putRequest(
       `/todos/${target.dataset["id"]}`,
       {
         todo: todos[target.dataset["arridx"]].todo,
@@ -49,8 +50,25 @@ const Todos = () => {
     setTodos(newTodos);
   };
 
-  const deleteTodo = ({ target }) => {
-    deleteRequest(`/todos/${target.dataset["id"]}`, getItem("loginToken"));
+  const updateTodo = async (target, dataId, dataArrIdx) => {
+    await putRequest(
+      `/todos/${dataId}`,
+      {
+        todo: target,
+        isCompleted: todos[dataArrIdx].isCompleted,
+      },
+      getItem("loginToken")
+    );
+    const newTodos = [...todos];
+    newTodos[dataArrIdx].todo = target;
+    setTodos(newTodos);
+  };
+
+  const deleteTodo = async ({ target }) => {
+    await deleteRequest(
+      `/todos/${target.dataset["id"]}`,
+      getItem("loginToken")
+    );
     const newTodos = [...todos];
     newTodos.splice(target.dataset["arridx"], 1);
     setTodos(newTodos);
@@ -74,7 +92,15 @@ const Todos = () => {
             ></input>
             <span>{todo}</span>
             <BtnContainer>
-              <Btn>수정</Btn>
+              <Modal
+                dataId={id}
+                dataArrIdx={idx}
+                btnText="수정"
+                width={50}
+                height={30}
+                modalContent={todo}
+                updateTodo={updateTodo}
+              />
               <Btn onClick={deleteTodo} data-id={id} data-arridx={idx}>
                 삭제
               </Btn>
@@ -88,9 +114,14 @@ const Todos = () => {
 
 const Add = styled.div``;
 const TodoList = styled.ul``;
-const BtnContainer = styled.div``;
+const BtnContainer = styled.div`
+  display: flex;
+  margin: 10px;
+`;
 const Btn = styled.button`
   margin: 5px;
+  width: 50px;
+  height: 30px;
 `;
 const Li = styled.li`
   list-style: none;
