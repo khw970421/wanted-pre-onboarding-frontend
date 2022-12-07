@@ -57,7 +57,6 @@ const getRequest = async (subUrl, token = "") => {
 
 const putRequest = async (subUrl, body, token = "") => {
   try {
-    console.log(subUrl, body);
     if (token) {
       const res = await axios.put(`${API}${subUrl}`, body, {
         headers: {
