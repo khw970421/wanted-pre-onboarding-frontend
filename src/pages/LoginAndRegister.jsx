@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import request from "../api/axios";
-import { setItem } from "../utils/localStorage";
+import { getItem, setItem } from "../utils/localStorage";
 
 const LoginAndRegister = () => {
   const [isLoginBtnClick, setIsLoginBtnClick] = useState(true);
@@ -13,6 +14,13 @@ const LoginAndRegister = () => {
     email: "",
     password: "",
   });
+  const navigate = useNavigate();
+  useEffect(() => {
+    const token = getItem("loginToken");
+    if (token) {
+      navigate("/todos");
+    }
+  }, []);
 
   const clickBtn = () => setIsLoginBtnClick(!isLoginBtnClick);
   const changeInputValue = ({ target }) => {
