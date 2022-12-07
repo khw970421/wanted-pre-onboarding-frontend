@@ -43,13 +43,26 @@ const LoginAndRegister = () => {
   const isPasswordValid = (password) => password.length >= 8;
 
   const clickSubmit = async () => {
-    const { access_token } = await request(
-      `/auth/signup`,
-      inputData.email,
-      inputData.password
-    );
-    access_token && setItem("loginToken", access_token);
-    if (getItem("loginToken")) navigate("/todos");
+    // login시
+    if (isLoginBtnClick) {
+      const { access_token } = await request(
+        `/auth/signin`,
+        inputData.email,
+        inputData.password
+      );
+      access_token && setItem("loginToken", access_token);
+      if (getItem("loginToken")) navigate("/todos");
+    }
+    // 회원가입시
+    else {
+      const { access_token } = await request(
+        `/auth/signup`,
+        inputData.email,
+        inputData.password
+      );
+      access_token && setItem("loginToken", access_token);
+      if (getItem("loginToken")) navigate("/todos");
+    }
   };
 
   return (
