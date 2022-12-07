@@ -30,7 +30,8 @@ const Todos = () => {
       },
       getItem("loginToken")
     );
-    console.log(p);
+    const newTodos = [p, ...todos];
+    setTodos(newTodos);
   };
 
   const clickCheckbox = ({ target }) => {
