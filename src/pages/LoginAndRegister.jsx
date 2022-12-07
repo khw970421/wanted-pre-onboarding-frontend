@@ -49,6 +49,7 @@ const LoginAndRegister = () => {
       inputData.password
     );
     access_token && setItem("loginToken", access_token);
+    if (getItem("loginToken")) navigate("/todos");
   };
 
   return (
