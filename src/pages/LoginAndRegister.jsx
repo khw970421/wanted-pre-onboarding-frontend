@@ -18,7 +18,7 @@ const LoginAndRegister = () => {
   useEffect(() => {
     const token = getItem("loginToken");
     if (token) {
-      navigate("/todos");
+      navigate("/todo");
     }
   }, []);
 
@@ -50,7 +50,7 @@ const LoginAndRegister = () => {
         password: inputData.password,
       });
       access_token && setItem("loginToken", access_token);
-      if (getItem("loginToken")) navigate("/todos");
+      if (getItem("loginToken")) navigate("/todo");
     }
     // 회원가입시
     else {
@@ -59,7 +59,7 @@ const LoginAndRegister = () => {
         password: inputData.password,
       });
       access_token && setItem("loginToken", access_token);
-      if (getItem("loginToken")) navigate("/todos");
+      if (getItem("loginToken")) navigate("/todo");
     }
   };
 
