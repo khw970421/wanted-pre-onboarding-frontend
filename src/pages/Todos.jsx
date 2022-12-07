@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { getItem } from "../utils/localStorage";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import request, { getRequest } from "./../api/axios";
+import request, { getRequest, putRequest } from "./../api/axios";
 
 const Todos = () => {
   const navigate = useNavigate();
@@ -19,6 +19,7 @@ const Todos = () => {
   const getTodos = async () => {
     const todos = await getRequest("/todos", getItem("loginToken"));
     setTodos(todos);
+    console.log(todos);
   };
 
   const addTodo = async () => {
@@ -32,6 +33,21 @@ const Todos = () => {
     console.log(p);
   };
 
+  const clickCheckbox = ({ target }) => {
+    const res = putRequest(
+      `/todos/${target.dataset["id"]}`,
+      {
+        todo: todos[target.dataset["arridx"]].todo,
+        isCompleted: !todos[target.dataset["arridx"]].isCompleted,
+      },
+      getItem("loginToken")
+    );
+    const newTodos = [...todos];
+    newTodos[target.dataset["arridx"]].isCompleted =
+      !newTodos[target.dataset["arridx"]].isCompleted;
+    setTodos(newTodos);
+  };
+
   return (
     <div>
       <Add>
@@ -39,9 +55,15 @@ const Todos = () => {
         <button onClick={addTodo}>할일 추가</button>
       </Add>
       <TodoList>
-        {todos.map(({ id, todo, isCompleted, userId }) => (
-          <Li>
-            <input type="checkbox" checked={isCompleted}></input>
+        {todos.map(({ id, todo, isCompleted, userId }, idx) => (
+          <Li key={idx}>
+            <input
+              type="checkbox"
+              checked={isCompleted}
+              onChange={clickCheckbox}
+              data-id={id}
+              data-arridx={idx}
+            ></input>
             <span>{todo}</span>
             <BtnContainer>
               <Btn>수정</Btn>
