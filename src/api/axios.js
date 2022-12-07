@@ -3,18 +3,11 @@ import axios from "axios";
 const API = "https://pre-onboarding-selection-task.shop";
 
 // Todos : 중복된 아이디 만들경우 에러 핸들링
-const request = async (subUrl, email, password) => {
+const request = async (subUrl, body) => {
   try {
-    const res = await axios.post(
-      `${API}${subUrl}`,
-      {
-        email: `${email}`,
-        password: `${password}`,
-      },
-      {
-        Authorization: `Bearer ${process.env.SERVICE_KEY}`,
-      }
-    );
+    const res = await axios.post(`${API}${subUrl}`, body, {
+      Authorization: `Bearer ${process.env.SERVICE_KEY}`,
+    });
     // 호출 중 에러가 발생했을 때의 처리
     if (res.status === 201 || res.status === 200) {
       return res.data;

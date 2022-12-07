@@ -45,21 +45,19 @@ const LoginAndRegister = () => {
   const clickSubmit = async () => {
     // login시
     if (isLoginBtnClick) {
-      const { access_token } = await request(
-        `/auth/signin`,
-        inputData.email,
-        inputData.password
-      );
+      const { access_token } = await request(`/auth/signin`, {
+        email: inputData.email,
+        password: inputData.password,
+      });
       access_token && setItem("loginToken", access_token);
       if (getItem("loginToken")) navigate("/todos");
     }
     // 회원가입시
     else {
-      const { access_token } = await request(
-        `/auth/signup`,
-        inputData.email,
-        inputData.password
-      );
+      const { access_token } = await request(`/auth/signup`, {
+        email: inputData.email,
+        password: inputData.password,
+      });
       access_token && setItem("loginToken", access_token);
       if (getItem("loginToken")) navigate("/todos");
     }
