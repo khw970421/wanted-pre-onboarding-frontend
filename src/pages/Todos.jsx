@@ -2,7 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import { getItem } from "../utils/localStorage";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import request, { deleteRequest, getRequest, putRequest } from "./../api/axios";
+import {
+  postRequest,
+  deleteRequest,
+  getRequest,
+  putRequest,
+} from "./../api/axios";
 import Modal from "../components/Modal";
 
 const Todos = () => {
@@ -23,7 +28,7 @@ const Todos = () => {
   };
 
   const addTodo = async () => {
-    const addTodo = await request(
+    const addTodo = await postRequest(
       "/todos",
       {
         todo: inputRef.current.value,

@@ -2,8 +2,7 @@ import axios from "axios";
 
 const API = "https://pre-onboarding-selection-task.shop";
 
-// Todos : 중복된 아이디 만들경우 에러 핸들링
-const request = async (subUrl, body, token = "") => {
+const postRequest = async (subUrl, body, token = "") => {
   try {
     if (token) {
       const res = await axios.post(`${API}${subUrl}`, body, {
@@ -99,5 +98,4 @@ const deleteRequest = async (subUrl, token = "") => {
   }
 };
 
-export { getRequest, putRequest, deleteRequest };
-export default request;
+export { getRequest, postRequest, putRequest, deleteRequest };
